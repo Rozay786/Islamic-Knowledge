@@ -1,91 +1,236 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Discord Community</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-<style>
-  * { box-sizing:border-box; margin:0; padding:0; }
-  body { font-family:'Inter',sans-serif; background:#0f1724; color:#e6f0f6; display:flex; flex-direction:column; height:100vh; }
-
-  header { background: rgba(30,41,59,0.9); padding:16px; text-align:center; }
-  header h1 { font-size:1.8rem; }
-  header p { font-size:1rem; color:#a0aec0; margin-top:4px; }
-
-  .tabs { display:flex; overflow-x:auto; background:#1e293b; }
-  .tab { padding:12px 24px; cursor:pointer; color:#cbd5e1; font-weight:500; transition:0.3s; white-space:nowrap; }
-  .tab:hover { background:#3b82f6; color:#fff; }
-  .tab.active { background:#3b82f6; color:#fff; }
-
-  .tab-content { flex:1; position:relative; overflow:hidden; }
-  .tab-pane { display:none; width:100%; height:calc(100vh - 120px); position:absolute; top:0; left:0; }
-  .tab-pane.active { display:block; }
-  widgetbot { width:100%; height:100%; }
-
-  footer { background: rgba(30,41,59,0.9); padding:8px; text-align:center; font-size:0.85rem; color:#9aa4b2; }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome to Our Community</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Inter',sans-serif; background:#0f1724; color:#e6f0f6; display:flex; flex-direction:column; height:100vh; overflow:hidden; }
+    
+    header { background: rgba(30,41,59,0.95); padding:20px; text-align:center; backdrop-filter:blur(10px); }
+    header h1 { font-size:1.8rem; margin-bottom:6px; }
+    header p { font-size:0.95rem; color:#a0aec0; }
+    
+    .tabs { display:flex; background:#1e293b; border-bottom:2px solid #334155; }
+    .tab { padding:14px 24px; cursor:pointer; color:#cbd5e1; font-weight:500; transition:0.3s; white-space:nowrap; }
+    .tab:hover { background:#3b82f6; color:#fff; }
+    .tab.active { background:#3b82f6; color:#fff; }
+    
+    .tab-content { flex:1; overflow:hidden; }
+    .tab-pane { display:none; width:100%; height:100%; }
+    .tab-pane.active { display:flex; flex-direction:column; }
+    
+    #general { padding:0; overflow:hidden; }
+    #general::-webkit-scrollbar { display:none; }
+    #general { -ms-overflow-style:none; scrollbar-width:none; }
+    widgetbot { width:100%; height:100%; display:block; }
+    widgetbot::-webkit-scrollbar { display:none; }
+    widgetbot::part(login), widgetbot::part(guest-button) { display:none !important; }
+    * { scrollbar-width:none; -ms-overflow-style:none; }
+    *::-webkit-scrollbar { display:none; }
+    
+    .welcome-section { 
+      position:relative; 
+      padding:80px 40px; 
+      text-align:center; 
+      max-width:900px; 
+      margin:auto;
+      overflow:auto;
+    }
+    .welcome-section::before {
+      content:'';
+      position:absolute;
+      top:0; left:0; right:0; bottom:0;
+      background-image:
+        linear-gradient(30deg, rgba(59,130,246,0.03) 12%, transparent 12.5%, transparent 87%, rgba(59,130,246,0.03) 87.5%, rgba(59,130,246,0.03)),
+        linear-gradient(150deg, rgba(59,130,246,0.03) 12%, transparent 12.5%, transparent 87%, rgba(59,130,246,0.03) 87.5%, rgba(59,130,246,0.03)),
+        linear-gradient(30deg, rgba(59,130,246,0.03) 12%, transparent 12.5%, transparent 87%, rgba(59,130,246,0.03) 87.5%, rgba(59,130,246,0.03)),
+        linear-gradient(150deg, rgba(59,130,246,0.03) 12%, transparent 12.5%, transparent 87%, rgba(59,130,246,0.03) 87.5%, rgba(59,130,246,0.03)),
+        linear-gradient(60deg, rgba(59,130,246,0.05) 25%, transparent 25.5%, transparent 75%, rgba(59,130,246,0.05) 75%, rgba(59,130,246,0.05)),
+        linear-gradient(60deg, rgba(59,130,246,0.05) 25%, transparent 25.5%, transparent 75%, rgba(59,130,246,0.05) 75%, rgba(59,130,246,0.05));
+      background-size:80px 140px;
+      background-position:0 0, 0 0, 40px 70px, 40px 70px, 0 0, 40px 70px;
+      opacity:0.4;
+      z-index:0;
+    }
+    .welcome-content { position:relative; z-index:1; }
+    .welcome-section h2 { 
+      font-size:3rem; 
+      color:#3b82f6; 
+      margin-bottom:24px;
+      font-weight:600;
+      text-shadow:0 2px 10px rgba(59,130,246,0.3);
+    }
+    .welcome-section .greeting { 
+      font-size:1.4rem; 
+      color:#60a5fa; 
+      margin-bottom:16px;
+      font-style:italic;
+    }
+    .welcome-section p { 
+      font-size:1.15rem; 
+      line-height:1.8; 
+      margin-bottom:16px;
+      color:#cbd5e1;
+    }
+    .welcome-divider {
+      width:120px;
+      height:3px;
+      background:linear-gradient(to right, transparent, #3b82f6, transparent);
+      margin:32px auto;
+    }
+    
+    .questions-section {
+      padding:40px 20px;
+      max-width:500px;
+      margin:0 auto;
+      overflow:auto;
+    }
+    .questions-section h3 { 
+      font-size:1.8rem; 
+      margin-bottom:24px; 
+      text-align:center;
+      color:#3b82f6;
+    }
+    form { display:grid; gap:16px; }
+    input, textarea { 
+      padding:14px; 
+      border-radius:8px; 
+      border:1px solid #334155; 
+      font:inherit; 
+      background:#1e293b; 
+      color:#e6f0f6;
+      transition:border 0.3s;
+    }
+    input:focus, textarea:focus {
+      outline:none;
+      border-color:#3b82f6;
+    }
+    textarea { resize:vertical; min-height:120px; }
+    button { 
+      padding:14px; 
+      border:none; 
+      border-radius:8px; 
+      font-weight:600; 
+      color:#fff; 
+      background:#3b82f6; 
+      cursor:pointer;
+      transition:background 0.3s;
+      font-size:1.05rem;
+    }
+    button:hover { background:#2563eb; }
+    button:disabled { background:#475569; cursor:not-allowed; }
+    .status { 
+      margin-top:12px; 
+      font-size:0.95rem; 
+      padding:12px; 
+      border-radius:6px;
+      text-align:center;
+    }
+    .status.success { background:#10b981; color:#fff; }
+    .status.error { background:#ef4444; color:#fff; }
+    
+    footer { 
+      background:rgba(30,41,59,0.95); 
+      padding:12px; 
+      text-align:center; 
+      color:#9aa4b2;
+      font-size:0.85rem;
+    }
+  </style>
 </head>
 <body>
-
-<header>
-  <h1>Your Discord Community</h1>
-  <p>Read-only view of your server</p>
-</header>
-
-<div class="tabs" id="tabs"></div>
-<div class="tab-content" id="tab-content"></div>
-<footer>
-  Visitors cannot join or send messages in the Discord server.
-</footer>
-
-<script src="https://cdn.jsdelivr.net/npm/@widgetbot/html-embed"></script>
-<script>
-const serverId = "1326450375422775388";
-
-// Example categories and channels
-// Replace or expand these with your real channel IDs
-const categories = [
-  { name: "General", channels: ["GENERAL_CHANNEL_ID_1","GENERAL_CHANNEL_ID_2"] },
-  { name: "Gaming", channels: ["GAMING_CHANNEL_ID_1","GAMING_CHANNEL_ID_2"] },
-  { name: "Voice", channels: ["VOICE_CHANNEL_ID_1"] }
-];
-
-function createTabs(categories) {
-  const tabsContainer = document.getElementById("tabs");
-  const contentContainer = document.getElementById("tab-content");
-
-  categories.forEach((category, idx) => {
-    const tab = document.createElement("div");
-    tab.className = "tab" + (idx === 0 ? " active" : "");
-    tab.innerText = category.name;
-    tab.dataset.tab = category.name;
-    tabsContainer.appendChild(tab);
-
-    const pane = document.createElement("div");
-    pane.className = "tab-pane" + (idx === 0 ? " active" : "");
-    pane.id = category.name;
-
-    category.channels.forEach(ch => {
-      const embed = document.createElement("widgetbot");
-      embed.setAttribute("server", serverId);
-      embed.setAttribute("channel", ch);
-      pane.appendChild(embed);
+  <header>
+    <h1>Community Portal</h1>
+    <p>Connect, Learn, and Grow Together</p>
+  </header>
+  <nav class="tabs">
+    <div class="tab active" data-tab="home">Home</div>
+    <div class="tab" data-tab="general">General</div>
+    <div class="tab" data-tab="questions">Questions</div>
+  </nav>
+  <main class="tab-content">
+    <section class="tab-pane active" id="home">
+      <div class="welcome-section">
+        <div class="welcome-content">
+          <div class="greeting">السلام عليكم ورحمة الله وبركاته</div>
+          <h2>Welcome to Our Server</h2>
+          <div class="welcome-divider"></div>
+          <p>We are honored by your presence. This is a space where our community comes together to share knowledge, support one another, and grow in faith and understanding.</p>
+          <p>Explore our channels to connect with fellow members, participate in meaningful discussions, and stay updated with community activities.</p>
+          <p>If you have any questions or need assistance, please feel free to reach out through our Questions section.</p>
+          <div class="welcome-divider"></div>
+          <p style="color:#60a5fa; font-style:italic;">May peace and blessings be upon you</p>
+        </div>
+      </div>
+    </section>
+    <section class="tab-pane" id="general">
+      <widgetbot server="1326450375422775388" channel="GENERAL_CHANNEL_ID_1" shard="https://e.widgetbot.io" defer></widgetbot>
+    </section>
+    <section class="tab-pane" id="questions">
+      <div class="questions-section">
+        <h3>Ask a Question</h3>
+        <p style="text-align:center; margin-bottom:20px; color:#94a3b8;">We're here to help. Share your question and we'll get back to you.</p>
+        <form id="question-form">
+          <input type="text" name="name" placeholder="Your name" required>
+          <input type="email" name="email" placeholder="Email address" required>
+          <textarea name="question" rows="6" placeholder="Your question" required></textarea>
+          <button type="submit">Send Question</button>
+          <div class="status" id="form-status" style="display:none;"></div>
+        </form>
+      </div>
+    </section>
+  </main>
+  <footer>
+    This is a read-only community portal. For full access, please join our server directly.
+  </footer>
+  <script>
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById(tab.dataset.tab).classList.add('active');
+      });
     });
-
-    contentContainer.appendChild(pane);
-
-    tab.addEventListener("click", () => {
-      document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
-      document.querySelectorAll(".tab-pane").forEach(p => p.classList.remove("active"));
-      tab.classList.add("active");
-      pane.classList.add("active");
+    const form = document.getElementById('question-form');
+    const status = document.getElementById('form-status');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = form.querySelector('button');
+      btn.disabled = true;
+      btn.textContent = 'Sending...';
+      status.style.display = 'none';
+      const formData = Object.fromEntries(new FormData(form).entries());
+      try {
+        const res = await fetch('/api/send-question', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData)
+        });
+        const body = await res.json();
+        status.style.display = 'block';
+        if (res.ok && body.success) {
+          status.className = 'status success';
+          status.textContent = body.message || 'Question sent successfully!';
+          form.reset();
+        } else {
+          status.className = 'status error';
+          status.textContent = body.error || 'Failed to send question.';
+        }
+      } catch (err) {
+        status.style.display = 'block';
+        status.className = 'status error';
+        status.textContent = 'Network error. Please try again.';
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Send Question';
+      }
     });
-  });
-}
-
-createTabs(categories);
-</script>
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/@widgetbot/html-embed"></script>
 </body>
 </html>
 
